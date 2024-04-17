@@ -3,7 +3,7 @@ import random
 from threading import Thread, Barrier, Semaphore
 
 def moleculagenerada():
-	print ("Generada una nueva molécula de H20") 
+	print ("Generada una nueva molécula de H20")
 	time.sleep(0.5)
 
 barrier = Barrier(3, action=moleculagenerada)
@@ -13,18 +13,20 @@ semaphore_O = Semaphore(1)
 
 def Hidrogeno():
 	#tiempo que tarda en generarse el atomo 
-	time.sleep(random.randint(1, 4)) 
-	print("H")
 	semaphore_H.acquire()
+	time.sleep(random.randint(1, 4)) 
+	
 	barrier.wait()
+	print("H")
 	semaphore_H.release()
 
 def Oxigeno():
-	#tiempo que tarda en generarse el atomo 
-	time.sleep(random.randint(1, 4)) 
-	print("O")
+	#tiempo que tarda en generarse el atomo
 	semaphore_O.acquire()
+	time.sleep(random.randint(1, 4)) 
+	
 	barrier.wait()
+	print("O")
 	semaphore_O.release()
 
 
