@@ -36,7 +36,6 @@ def main():
     t1 = time.time() 
     urls = bajar_html(url_raiz)
     
-    # Submit work asynchronously
     results = []
     for direccion in urls: 
         result = pool.apply_async(bajar_fichero, (direccion,))

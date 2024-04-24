@@ -35,7 +35,6 @@ def main():
     t1 = time.time() 
     urls = bajar_html(url_raiz)
     
-    # Use Pool.map() to run bajar_fichero in parallel
     with multiprocessing.Pool() as pool:
         results = pool.map(bajar_fichero, urls)
     

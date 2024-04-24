@@ -12,7 +12,7 @@ bytes_total = 0
 def bajar_fichero(queue):
     global fich_total, bytes_total
     while True:
-        direccion = queue.get()  # Get URL from the queue
+        direccion = queue.get()
         if direccion == "":
             break  # Terminate if an empty string is received
         id = multiprocessing.current_process().name
@@ -33,7 +33,7 @@ def bajar_html(url_raiz, queue):
     html = r.read().decode('utf-8', 'ignore')
     for m in re.finditer(r'src\w*=\w*"([-_./0-9a-zA-Z]*)"', html, re.I):
         direccion = urllib.parse.urljoin(url_raiz, m.group(1))
-        queue.put(direccion)  # Put URL into the queue
+        queue.put(direccion)
 
 def main():
     url_raiz = 'http://www.uv.es'
@@ -42,7 +42,6 @@ def main():
 
     queue = multiprocessing.Queue()
 
-    # Create a fixed number of processes
     num_processes = os.cpu_count()
     processes = []
     for _ in range(num_processes):

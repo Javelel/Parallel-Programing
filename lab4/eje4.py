@@ -6,23 +6,21 @@ import shutil
 import time 
 import multiprocessing 
 
-fich_total = multiprocessing.Value('i', 0) 
-bytes_total = multiprocessing.Value('i', 0) 
+fich_total = 0
+bytes_total = 0
 
 def bajar_fichero(direccion): 
     global fich_total, bytes_total 
     id = multiprocessing.current_process().name 
-    with fich_total.get_lock():
-        fich_total.value += 1 
-    print(id, fich_total.value, direccion) 
+    fich_total += 1 
+    print(id, fich_total, direccion) 
     s = direccion.split('/') 
     fichero = 'download/' + s[-1] 
     try: 
         i = urllib.request.urlopen(direccion) 
         with open(fichero, 'wb') as f: 
             shutil.copyfileobj(i, f) 
-            with bytes_total.get_lock():
-                bytes_total.value += f.tell() 
+            bytes_total += f.tell() 
     except Exception as err: 
         print(err) 
 
@@ -44,7 +42,6 @@ def main():
     t1 = time.time() 
     urls = bajar_html(url_raiz)
     
-    # Submit work asynchronously
     for direccion in urls: 
         pool.apply_async(bajar_fichero, (direccion,))
     
@@ -57,9 +54,9 @@ def main():
 
     print('---------------------') 
     print('Tiempo', tiempo_total) 
-    print('Ficheros', fich_total.value) 
-    print('MBytes', bytes_total.value / (1024.0 ** 2)) 
-    print('Ancho de banda (MBit/s)', (bytes_total.value * 8 / (1024.0 ** 2)) / tiempo_total) 
+    print('Ficheros', fich_total) 
+    print('MBytes', bytes_total / (1024.0 ** 2)) 
+    print('Ancho de banda (MBit/s)', (bytes_total * 8 / (1024.0 ** 2)) / tiempo_total) 
 
 if __name__ == "__main__": 
     main() 
