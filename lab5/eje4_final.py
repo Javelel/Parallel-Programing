@@ -6,7 +6,7 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # Total number of elements
-n = 1000000
+n = 10000000
 
 # Generate random numbers if rank is 0
 if rank == 0:

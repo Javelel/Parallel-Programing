@@ -6,12 +6,12 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 # Total number of elements
-n = 1000000
+n = 10000000
 
 # Generate random numbers if rank is 0
 if rank == 0:
-    start_time_broadcast = MPI.Wtime()  # Start time measurement for broadcast
     numbers = [random.randint(1, 100) for _ in range(n)]
+    start_time_broadcast = MPI.Wtime()
 else:
     numbers = None
 
@@ -23,13 +23,13 @@ partial_sum = sum(numbers)
 
 # Gather partial sums from all processes to process 0
 if rank == 0:
-    start_time_reduction = MPI.Wtime()  # Start time measurement for reduction
+    start_time_reduction = MPI.Wtime()
     partial_sums = [partial_sum]
     for i in range(1, size):
         partial_sum_received = comm.recv(source=i)
         partial_sums.append(partial_sum_received)
     total_sum_point_to_point = sum(partial_sums)
-    end_time_point_to_point = MPI.Wtime()  # End time measurement for point-to-point communication
+    end_time_point_to_point = MPI.Wtime()
 else:
     comm.send(partial_sum, dest=0)
 
